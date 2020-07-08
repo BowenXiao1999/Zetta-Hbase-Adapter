@@ -39,10 +39,52 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 
 
 总结zk需要的能力：
+1. 负责Active Master的选举，保证集群永远有且仅有一个Active Master在线上。
+2. 对 Master, Region Server进行上下线管理 (Master独占锁，Region Server上线通知)
+3. zk 需要与几乎所有服务器进程保持会话（心跳检测），需要维护所有Server的连接状态，~~负责故障Node的重启~~不负责故障恢复，只是为故障恢复提供信息。
+4. zk 需要维护一个 Meta table (特殊的 HBase 表)，包含了集群中所有 regions 的位置信息(寻址入口)。
+5. 解析客户端发过来的zk请求，查找到row key的位置信息后返回给客户端（涉及与客户端RPC请求的编解码以及查找过程）。
+6. 存储Hbase的schema，包括有哪些table，每个table有哪些column family。
 
-1. zk 需要与几乎所有服务器进程保持会话（心跳检测），需要维护所有Server的连接状态，~~负责故障Node的重启~~不负责故障恢复，只是为故障恢复提供信息。
-2. zk 需要维护一个 Meta table (特殊的 HBase 表)，包含了集群中所有 regions 的位置信息。
-3. 需要解析客户端发过来的查询请求，查找到row key的位置信息后返回给客户端（涉及与客户端RPC请求的编解码）。
+### Zk Region定位
+系统如何找到某个row key (或者某个 row key range)所在的region。bigtable 使用三层类似B+树的结构来保存region位置。
+
+第一层是保存zookeeper里面的文件，它持有root region的位置。
+
+第二层root region是.META.表的第一个region其中保存了.META.z表其它region的位置。通过root region，我们就可以访问.META.表的数据。
+
+第三层是.META.，它是一个特殊的表，保存了hbase中所有数据表的region 位置信息。
+
+说明：
+1. root region永远不会被split，保证了最需要三次跳转，就能定位到任意region 。
+2. .META.表每行保存一个region的位置信息，row key 采用表名+表的最后一样编码而成。
+3. 为了加快访问，.META.表的全部region都保存在内存中。假设，.META.表的一行在内存中大约占用1KB。并且每个region限制为128MB。那么上面的三层结构可以保存的region数目为：(128MB/1KB) * (128MB/1KB) = = 2(34)个region
+4. client会将查询过的位置信息保存缓存起来，缓存不会主动失效，因此如果client上的缓存全部失效，则需要进行6次网络来回，才能定位到正确的region(其中三次用来发现缓存失效，另外三次用来获取位置信息)。
+
+**Zk 管理 Master, Region Server 的上下线**
+
+### Region Server 上线
+master使用zookeeper来跟踪region server状态。当某个region server启动时，会首先在zookeeper上的server目录下建立代表自己的文件，并获得该文件的独占锁。由于master订阅了server 目录上的变更消息，当server目录下的文件出现新增或删除操作时，master可以得到来自zookeeper的实时通知。因此一旦region server上线，master能马上得到消息。
+
+### Region Server 下线
+当region server下线时，它和zookeeper的会话断开，zookeeper而自动释放代表这台server的文件上的独占锁。而master不断轮询 server目录下文件的锁状态。如果master发现某个region server丢失了它自己的独占锁，(或者master连续几次和region server通信都无法成功),master就是尝试去获取代表这个region server的读写锁，一旦获取成功，就可以确定：
+1 region server和zookeeper之间的网络断开了。
+2 region server挂了。
+的其中一种情况发生了，无论哪种情况，region server都无法继续为它的region提供服务了，此时master会删除server目录下代表这台region server的文件，并将这台region server的region分配给其它还活着的同志。
+如果网络短暂出现问题导致region server丢失了它的锁，那么region server重新连接到zookeeper之后，只要代表它的文件还在，它就会不断尝试获取这个文件上的锁，一旦获取到了，就可以继续提供服务。
+
+
+### Master 上线
+master启动进行以下步骤:
+1 从zookeeper上获取唯一一个代码master的锁，用来阻止其它master成为master。
+2 扫描zookeeper上的server目录，获得当前可用的region server列表。
+3 和2中的每个region server通信，获得当前已分配的region和region server的对应关系。
+4 扫描.META.region的集合，计算得到当前还未分配的region，将他们放入待分配region列表。
+
+### Master 下线
+由于master只维护表和region的元数据，而不参与表数据IO的过程，master下线仅导致所有元数据的修改被冻结(无法创建删除表，无法修改表的schema，无法进行region的负载均衡，无法处理region上下线，无法进行region的合并，唯一例外的是region的split可以正常进行，因为只有region server参与)，表的数据读写还可以正常进行。因此master下线短时间内对整个hbase集群没有影响。从上线过程可以看到，master保存的 信息全是可以冗余信息（都可以从系统其它地方收集到或者计算出来），因此，一般hbase集群中总是有一个master在提供服务，还有一个以上 的’master’在等待时机抢占它的位置。
+
+
 
 ## 源码阅读
 
