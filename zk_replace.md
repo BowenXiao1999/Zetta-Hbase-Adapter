@@ -21,7 +21,7 @@ HMaster 们会竞争创建 ephemeral 节点，而 Zookeeper 决定谁是第一�
 首次读写操作过程：
 1. 客户端从 Zookeeper 那里获取是哪一台 Region Server 负责管理 Meta table。
 2. 客户端会查询那台管理 Meta table 的 Region Server，进而获知是哪一台 Region Server 负责管理本次数据请求所需要的 rowkey。客户端会缓存这个信息，以及 Meta table 的位置信息本身。
-3. 然后客户端回去访问那台 Region Server，获取数据。
+3. 然后客户端回去访问那台 Region Server，获取数据。(注意Master不直接处理I/O，Master用来分配Region，故障恢复，负载均衡，GC，Schema更新)
 
 对于以后的的读请求，客户端可以从缓存中直接获取 Meta table 的位置信息(在哪一台 Region Server 上)，以及之前访问过的 rowkey 的位置信息(哪一台 Region Server 上)，除非因为 Region 被迁移了导致缓存失效。这时客户端会重复上面的步骤，重新获取相关位置信息并更新缓存。
 
