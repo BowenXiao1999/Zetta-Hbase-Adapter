@@ -1,4 +1,8 @@
 // test project main.go
+// src: https://blog.csdn.net/zhaominpro/article/details/77543543
+// https://blog.csdn.net/whereismatrix/article/details/50420099
+// 博客园: https://www.cnblogs.com/zhichaoma/p/12640064.html
+
 package main
 
 import (
