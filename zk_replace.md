@@ -56,7 +56,7 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 第三层是.META.，它是一个特殊的表，保存了hbase中所有数据表的region 位置信息。
 
 说明：
-1. root region永远不会被split，保证了最需要三次跳转，就能定位到任意region 。
+1. root region永远不会被split，保证了最多需要三次跳转，就能定位到任意region 。
 2. .META.表每行保存一个region的位置信息，row key 采用表名+表的最后一样编码而成。
 3. 为了加快访问，.META.表的全部region都保存在内存中。假设，.META.表的一行在内存中大约占用1KB。并且每个region限制为128MB。那么上面的三层结构可以保存的region数目为：(128MB/1KB) * (128MB/1KB) = = 2(34)个region
 4. client会将查询过的位置信息保存缓存起来，缓存不会主动失效，因此如果client上的缓存全部失效，则需要进行6次网络来回，才能定位到正确的region(其中三次用来发现缓存失效，另外三次用来获取位置信息)。
