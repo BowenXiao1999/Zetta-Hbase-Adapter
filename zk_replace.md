@@ -49,12 +49,11 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 
 
 ## 方案
-整体来说，实现分为2个部分
+实现前先要弄清楚几个问题：
+1. 客户端传过来的请求，Go client/Java client是否有区别？这涉及到编码解码的实现。
+2. 数据维护是要用etcd集群还是Zetta有类似的能力？(如果zk不是性能瓶颈，可以考虑采用etcd来维护)
+3. 心跳检测，涉及到和Region Server的信息交流，然而我们现在没有实现Region Server。
 
-1. 熟悉Hbase在运行时和zk需要的交互过程，了解相关接口
-
-
-2. Back with Zetta Cluster，使用Zetta集群提供的接口，解析zk写入信息
 
 
 ## 具体个人行动建议
