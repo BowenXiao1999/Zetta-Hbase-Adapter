@@ -29,7 +29,7 @@ HMaster 们会竞争创建 ephemeral 节点，而 Zookeeper 决定谁是第一�
 
 Meta Table数据格式：
 
-![img](https://pic1.zhimg.com/80/v2-df270f9aabb60e8f1857ecb73e1402d8_1440w.jpg)
+![img](https://pic4.zhimg.com/80/v2-53f6fe69e79707a8cf95989d15c4f1bb_1440w.jpg)
 
 Meta table 是一个特殊的 HBase table，它保存了系统中所有的 region 列表。这张 table 类似一个 b-tree，结构大致如下：
 
