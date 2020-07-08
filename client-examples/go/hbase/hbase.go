@@ -1,5 +1,6 @@
 package main
 
+
 import (
 	"context"
 	"fmt"
@@ -10,6 +11,8 @@ import (
 	"github.com/tsuna/gohbase/hrpc"
 	// "github.com/tsuna/gohbase/pb"
 )
+
+// https://akbarahmed.com/2012/08/13/hbase-command-line-tutorial/
 
 func init() {
 
