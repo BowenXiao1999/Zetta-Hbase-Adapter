@@ -115,6 +115,10 @@ master启动进行以下步骤:
 2. 熟悉Hbase 和 zk的交互
 3. 熟悉Zetta 接口
 
+## 引用资源
+1. https://zhuanlan.zhihu.com/p/91385015
+2. https://zhuanlan.zhihu.com/p/134549250
+
 
 
 
