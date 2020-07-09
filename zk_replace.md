@@ -45,13 +45,21 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 4. zk 需要维护一个 Meta table (特殊的 HBase 表)，包含了集群中所有 regions 的位置信息(寻址入口)。
 5. 解析客户端发过来的zk请求，查找到row key的位置信息后返回给客户端（涉及与客户端RPC请求的编解码以及查找过程）。
 6. 存储Hbase的schema，包括有哪些table，每个table有哪些column family。
+7. 客户端连接Session失效的情况下透明切换到其他服务器来响应请求。
+8. 多集群情况下，要考虑数据一致性，故障恢复，支持事务，读写分离。
+
 
 ### Zk Region定位
-系统如何找到某个row key (或者某个 row key range)所在的region。bigtable 使用三层类似B+树的结构来保存region位置。
+
+抓包HBase <-> Zookeeper 读写过程交互：
+1. client第一步先向Zookeeper取到Hbaseid （只会在client第一次读写Hbase时读取）
+2. client第二步会向Zookeeper取到Hbase所属node的信息
+3. 最后client会向zookeeper取到Hbase:meta表所在的regionServer的地址及端口信息
+
 
 第一层是保存zookeeper里面的文件，它持有root region的位置。
 
-第二层root region是.META.表的第一个region其中保存了.META.z表其它region的位置。通过root region，我们就可以访问.META.表的数据。
+第二层root region是.META.表的第一个region。其中保存了.META.z表其它region的位置。通过root region，我们就可以访问.META.表的数据。
 
 第三层是.META.，它是一个特殊的表，保存了hbase中所有数据表的region 位置信息。
 
@@ -59,7 +67,7 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 1. root region永远不会被split，保证了最多需要三次跳转，就能定位到任意region 。
 2. .META.表每行保存一个region的位置信息，row key 采用表名+表的最后一样编码而成。
 3. 为了加快访问，.META.表的全部region都保存在内存中。假设，.META.表的一行在内存中大约占用1KB。并且每个region限制为128MB。那么上面的三层结构可以保存的region数目为：(128MB/1KB) * (128MB/1KB) = = 2(34)个region
-4. client会将查询过的位置信息保存缓存起来，缓存不会主动失效，因此如果client上的缓存全部失效，则需要进行6次网络来回，才能定位到正确的region(其中三次用来发现缓存失效，另外三次用来获取位置信息)。
+4. client会将查询过的位置信息保存缓存起来，缓存不会主动失效。因此如果client上的缓存全部失效，则需要进行6次网络来回，才能定位到正确的region(其中三次用来发现缓存失效，另外三次用来获取位置信息)。
 
 **Zk 管理 Master, Region Server 的上下线**
 
@@ -95,7 +103,11 @@ master启动进行以下步骤:
 1. 客户端传过来的请求，Go client/Java client是否有区别？这涉及到编码解码的实现。
 2. 数据维护是要用etcd集群还是Zetta有类似的能力？(如果zk不是性能瓶颈，可以考虑采用etcd来维护)
 3. 心跳检测，涉及到和Region Server的信息交流，然而我们现在没有实现Region Server。
+4. Region Server计划提供什么接口？数据格式是怎么样的？
 
+我认为要实现这个组件，high-level大概可以分成2种方式
+1. 模仿zetcd，把zk的请求转化为其他的请求（etcd, zetta）。这个方式理论上比较容易实现，因为有比较好的开源例子可以参考。
+2. 自己用Go实现一个最小化的zk（感觉工程量巨大，而且github上也没有轮子可以参考），自己维护zk集群状态。
 
 
 ## 具体个人行动建议
