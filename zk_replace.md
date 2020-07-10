@@ -36,7 +36,7 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 
 
 
-总结zk需要的能力：
+s总结zk需要的能力：
 1. 负责Active Master的选举，保证集群永远有且仅有一个Active Master在线上。
 2. 对 Master, Region Server进行上下线管理 (Master独占锁，Region Server上线通知)
 3. zk 需要与几乎所有服务器进程保持会话（心跳检测），需要维护所有Server的连接状态，~~负责故障Node的重启~~不负责故障恢复，只是为故障恢复提供信息。
@@ -44,7 +44,7 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 5. 解析客户端发过来的zk请求，查找到row key的位置信息后返回给客户端（涉及与客户端RPC请求的编解码以及查找过程）。
 6. 存储Hbase的schema，包括有哪些table，每个table有哪些column family。
 7. 客户端连接Session失效的情况下透明切换到其他服务器来响应请求。
-8. 多集群情况下，要考虑数据一致性，故障恢复，支持事务，读写分离。
+~~8. 多集群情况下，要考虑数据一致性，故障恢复，支持事务，读写分离。~~ (不属于外部能感知的)
 
 对外的能力可以规划为：
 选举(保证一个Master)、故障检测(通知Master恢复)、通知Master(Region Assignment)、Region寻址提供地址、存储schema \[**重点看这几部分源代码**\]
