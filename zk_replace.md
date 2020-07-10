@@ -51,7 +51,7 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 
 
 ### Zk Region定位
-定位过程：（https://blog.csdn.net/u010039929/article/details/75299691）
+定位过程: https://blog.csdn.net/u010039929/article/details/75299691
 
 抓包HBase <-> Zookeeper 读写过程交互：
 1. client第一步先向Zookeeper取到Hbaseid （只会在client第一次读写Hbase时读取）
