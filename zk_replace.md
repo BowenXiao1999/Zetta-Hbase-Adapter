@@ -1,10 +1,8 @@
 # Zookeeper Go 组件化最小实现
 
 ## 背景
-Zetta项目需要迁移Hbase业务, 而Hbase依赖zk做一些存储配置。
-希望使用Go实现一个提供最小功能的zk，并且用Zetta的Cluster支持，能作为一个组件嵌入Hbase的整体迁移。
+Zetta项目需要迁移Hbase业务, 而Hbase依赖zk做一些存储配置。希望使用Go实现一个提供最小功能的zk，能作为一个组件嵌入Hbase的整体迁移。
 
-etcd 实现过：zetcd, 主要提供的能力是保持使用zookeeper的api，但是使用etcd集群。
 
 ## HBase Zk 架构介绍
 HBase 使用 Zookeeper 做分布式管理服务，来维护集群中所有服务的状态。Zookeeper 维护了哪些 servers 是健康可用的，并且在 server 故障时做出通知。
@@ -53,6 +51,7 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 
 
 ### Zk Region定位
+定位过程：（https://blog.csdn.net/u010039929/article/details/75299691）
 
 抓包HBase <-> Zookeeper 读写过程交互：
 1. client第一步先向Zookeeper取到Hbaseid （只会在client第一次读写Hbase时读取）
@@ -72,7 +71,6 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 3. 为了加快访问，.META.表的全部region都保存在内存中。假设，.META.表的一行在内存中大约占用1KB。并且每个region限制为128MB。那么上面的三层结构可以保存的region数目为：(128MB/1KB) * (128MB/1KB) = = 2(34)个region
 4. client会将查询过的位置信息保存缓存起来，缓存不会主动失效。因此如果client上的缓存全部失效，则需要进行6次网络来回，才能定位到正确的region(其中三次用来发现缓存失效，另外三次用来获取位置信息)。
 
-**Zk 管理 Master, Region Server 的上下线**
 
 ### Region Server 上线
 master使用zookeeper来跟踪region server状态。当某个region server启动时，会首先在zookeeper上的server目录下建立代表自己的文件，并获得该文件的独占锁。由于master订阅了server 目录上的变更消息，当server目录下的文件出现新增或删除操作时，master可以得到来自zookeeper的实时通知。因此一旦region server上线，master能马上得到消息。
@@ -98,12 +96,20 @@ master启动进行以下步骤:
 简要总结一下：
 Zookeeper不会直接插手分布式集群的事务，它只提供元信息的存取接口，怎么使用取决于自己的环境。比如服务器故障恢复，这种活是HMaster去做，不过这个信息是zk传达的。同时还有Meta表中Region的信息，也是各个节点自己维护。Zookeeper只负责保存这些数据，改动是由外部发起的。
 
+### Master 选举
+更多细节见: https://blog.csdn.net/qq_42158942/article/details/102505004
+
+主备Master同时向ZooKeeper注册自己的节点信息，谁先写入，谁就是主节点
+注册写入时会查询有没有相对应的节点，如果有，这个HMaster查看主节点是谁，如果主Master有相对应的节点并且实时更新了，那么这个HMaster就会自动作为备节点，进入休眠状态  (inactive Master)
+备节点会实时监听ZooKeeper的状态主节点的信息
+在系统开始时，主备节点都会向Zookeeper里面创建一个目录，比如叫HBase，在目录中写入节点信息，创建之前先去查询里面有没有这个目录以及目录里面文件的时间戳信息与当前节点的时间戳信息做对比，如果对比超过了5秒钟，那说明这个节点已经损坏了主节点每隔一秒更新下时间戳，备节点每隔一秒去查询下时间戳，当主节点宕机时，时间戳没更新，备节点查询超过5秒钟没有更新，意味着主节点已经宕机，备节点非常高兴的把自己的节点信息写入，变成主节点
+保证任何时候，集群中只有一个Master
+
 
 
 ## 源码阅读
+(还是有点难找细节)
 * hbase 通过 ZKUtil 来进行大部分操作：包括connect, login, watchers, Data set/retrieval, create/delete Node (ZKUtil/java)
-* Region 寻址：https://blog.csdn.net/u010039929/article/details/75299691
-* 
 * TODO: 打断点调试一下hbase java例子。跟踪查找Meta表的调用链条
 
 ## 方案
