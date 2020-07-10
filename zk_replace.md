@@ -48,6 +48,9 @@ Meta table 是一个特殊的 HBase table，它保存了系统中所有的 regio
 7. 客户端连接Session失效的情况下透明切换到其他服务器来响应请求。
 8. 多集群情况下，要考虑数据一致性，故障恢复，支持事务，读写分离。
 
+对外的能力可以规划为：
+选举(保证一个Master)、故障检测(通知Master恢复)、通知Master(Region Assignment)、Region寻址提供地址、存储schema \[**重点看这几部分源代码**\]
+
 
 ### Zk Region定位
 
@@ -98,8 +101,10 @@ Zookeeper不会直接插手分布式集群的事务，它只提供元信息的�
 
 
 ## 源码阅读
-
-
+* hbase 通过 ZKUtil 来进行大部分操作：包括connect, login, watchers, Data set/retrieval, create/delete Node (ZKUtil/java)
+* Region 寻址：https://blog.csdn.net/u010039929/article/details/75299691
+* 
+* TODO: 打断点调试一下hbase java例子。跟踪查找Meta表的调用链条
 
 ## 方案
 实现前先要弄清楚几个问题：

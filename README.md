@@ -14,10 +14,11 @@ Record for Zetta Hbase adaption Project.
 
 - [x] Use Go client to manipulate Hbase and Zookeeper (client-exmpales)
 
-- [ ] Use Java Client to manipulate Hbase and Zookeeper (client-exmpales)
+- [x] Use Java Client to manipulate Hbase and Zookeeper (client-exmpales)
 
 
-- [ ] Investigate the details of zk in Hbase and Come up a [document](./zk_replace.md) for Implementation. 
+- [x] Investigate the details of zk in Hbase and Come up a [document](./zk_replace.md) for Implementation. 
+
 
 
 ## Useful Links
