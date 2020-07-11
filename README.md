@@ -19,6 +19,13 @@ Record for Zetta Hbase adaption Project.
 
 - [x] Investigate the details of zk in Hbase and Come up a [document](./zk_replace.md) for Implementation. 
 
+### Week 2
+
+- [x] Read through write/read source code of hbase client
+
+- [ ] Deploy a zetcd and test it with zkcli
+
+- [ ] Deprieve
 
 
 ## Useful Links
