@@ -25,7 +25,7 @@ Record for Zetta Hbase adaption Project.
 
 - [ ] Deploy a zetcd and test it with zkcli
 
-- [ ] Deprieve
+- [ ] Relace back cluster etcd by pd
 
 
 ## Useful Links
