@@ -54,7 +54,7 @@ func main() {
 
 日志：
 
-![image-20200710203244213](/Users/bytedance/Library/Application Support/typora-user-images/image-20200710203244213.png)
+![image-20200710203244213](./img/image-20200710203244213.png)
 
 从这个源码中可以分析hbase的读写流程：
 
@@ -76,7 +76,7 @@ func main() {
 
 Put -> mutate -> SendRPC
 
-![image-20200710182308689](/Users/bytedance/Library/Application Support/typora-user-images/image-20200710182308689.png)
+![image-20200710182308689](./img/image-20200710182308689.png)
 
 RPC的过程：先拿Region，然后给Region发RPC。
 
@@ -86,7 +86,7 @@ RPC的过程：先拿Region，然后给Region发RPC。
 
 2. 
 
-![image-20200710182355563](/Users/bytedance/Library/Application Support/typora-user-images/image-20200710182355563.png)
+![image-20200710182355563](./img/image-20200710182355563.png)
 
 拿Region先从缓存查
 
@@ -96,7 +96,7 @@ RPC的过程：先拿Region，然后给Region发RPC。
 
 终于可以看到与Zk的交互了，可以看到zk负责查谁是Master，hbase:meta在哪里。
 
-![image-20200710182655060](/Users/bytedance/Library/Application Support/typora-user-images/image-20200710182655060.png)
+![image-20200710182655060](./img/image-20200710182655060.png)
 
 
 
