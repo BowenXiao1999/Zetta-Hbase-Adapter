@@ -16,13 +16,13 @@
 
 Zetcd:
 
-![image-20200711221124282](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200711221124282.png)
+![image-20200711221124282](./img/image-20200711221124282.png)
 
 
 
 Etcd:
 
-![image-20200711221252014](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200711221252014.png)
+![image-20200711221252014](./img/image-20200711221252014.png)
 
 
 
@@ -76,7 +76,7 @@ func main() {
 
 日志打印效果正常
 
-![image-20200711221457511](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200711221457511.png)
+![image-20200711221457511](./img/image-20200711221457511.png)
 
 
 
@@ -136,7 +136,7 @@ Hbase读写会需要连接zk（具体可参见我的源码分析），我们这�
 
 修改完成后，启动hbase，跑这个文件成功
 
-![image-20200711221936175](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200711221936175.png)
+![image-20200711221936175](./img/image-20200711221936175.png)
 
 
 
