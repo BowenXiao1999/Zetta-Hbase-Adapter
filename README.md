@@ -21,11 +21,13 @@ Record for Zetta Hbase adaption Project.
 
 ### Week 2
 
-- [x] Read through write/read source code of hbase client
+- [x] Read through write/read source code of hbase client [document](./zk_rpc.md)
 
-- [ ] Deploy a zetcd and test it with zkcli
+- [x] Deploy a zetcd and test it with go-hbase [document](./hbase_adapt.md)
 
 - [ ] Relace back cluster etcd by pd
+
+- [x] Try to build zetcd after change source code (fail for a long time) [document](./rebuild.md)
 
 
 ## Useful Links
