@@ -25,9 +25,16 @@ Record for Zetta Hbase adaption Project.
 
 - [x] Deploy a zetcd and test it with go-hbase [document](./hbase_adapt.md)
 
-- [ ] Relace back cluster etcd by pd
 
 - [x] Try to build zetcd after change source code (fail for a long time) [document](./rebuild.md)
+
+- [x] Test rebuild zetcd with CRUD Request [document](./zk_create.md)
+
+- [ ] Analyze the source code of zetcd in depth and evaluate the performance [document](./zetcd_performance.md)
+ 
+- [ ] Relace back cluster etcd by pd
+
+
 
 
 ## Useful Links

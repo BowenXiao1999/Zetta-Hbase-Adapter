@@ -1,3 +1,12 @@
+# Play With Zetcd
+
+这一章是上一篇编译Zetcd的延伸，为了确定一些重要逻辑，我往zetcd的日志系统里加了几句Println。
+
+
+
+添加一个znode
+
+```go
 // test project main.go
 // src: https://blog.csdn.net/zhaominpro/article/details/77543543
 // https://blog.csdn.net/whereismatrix/article/details/50420099
@@ -47,3 +56,28 @@ func main()  {
 	// fmt.Println("delete:",p)
 
 }
+```
+
+
+
+修改zetcd源码并重新编译
+
+```go
+func (zl *zkLog) Create(xid Xid, op *CreateRequest) ZKResponse {
+	glog.V(7).Infof("Create(%v,%+v)", xid, *op)
+	fmt.Println("Create(%v,%+v)", xid, *op) // new added
+	return zl.zk.Create(xid, op)
+}
+```
+
+
+
+
+
+
+
+
+
+Zetcd Server 正常打印
+
+![image-20200714001824559](/Users/bytedance/Library/Application Support/typora-user-images/image-20200714001824559.png)
