@@ -28,6 +28,7 @@ EtcdBackend负责调用etcdv3 api，主要是利用了STM。
 
 
 
+## 性能
 如果要添加代码的话，主要是实现一个新的backend支持，也即是用pd的api来实现一些etcd的调用。解析这块可以沿用zetcd的设计，因为这个设计本身就非常符合zk的模型。
 
 
@@ -43,4 +44,5 @@ EtcdBackend负责调用etcdv3 api，主要是利用了STM。
 
 ![key fetch latency](https://coreos.com/sites/default/files/inline-images/key-fetch-latency_0.png)
 
-可以看到无论是zetcd，etcd，读取效率都是要比原生zk差很多的。这至少证明zetcd在性能方向上是没有优势的，选择它的理由是便利 + 易于部署。所以我们的这种思路，用比较大的成本去换得可能还不如zetcd的性能，是否是值得的呢？
+总结：
+**可以看到无论是zetcd，etcd，读取效率都是要比原生zk差很多的。这至少证明zetcd在性能方向上是没有优势的，选择它的理由是便利 + 易于部署。所以我们的这种思路，用比较大的成本去换得可能还不如zetcd的性能，是否是值得的呢？**
