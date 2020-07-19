@@ -28,13 +28,13 @@ func main() {
 	// create a table and column family
 	// put a scan
 	// Values maps a ColumnFamily -> Qualifiers -> Values.
-	values := map[string]map[string][]byte{"mycf": map[string][]byte{"a": []byte("Hello Word")}}
-	putRequest, _ := hrpc.NewPutStr(context.Background(), "myTable", "15", values)
+	values := map[string]map[string][]byte{"cf1": map[string][]byte{"a": []byte("Hello Word")}}
+	putRequest, _ := hrpc.NewPutStr(context.Background(), "myTable2", "15", values)
 	client.Put(putRequest)
 
 	// Perform a get for the cell with key "15", column family "cf" and qualifier "a"
-	family := map[string][]string{"mycf": []string{"a"}}
-	getRequest, _ := hrpc.NewGetStr(context.Background(), "myTable", "15",
+	family := map[string][]string{"cf1": []string{"a"}}
+	getRequest, _ := hrpc.NewGetStr(context.Background(), "myTable2", "15",
 		hrpc.Families(family))
 	getRsp, _ := client.Get(getRequest)
 	fmt.Println(getRsp)
