@@ -11,7 +11,7 @@
 
 1. 一开始以为GetData只有在HBase Client才会调用，但是发现Hbase Server也严重依赖这个函数，所以我直接修改GetData函数，也影响了Hbase Server，出现了很多奇怪的Bug。现在加入了条件判断，避免误伤其他请求。
 
-2. 希望把返回的Value以字符串的形式打印出来，但是发现经过了protobuf的处理，无论怎么转换都是有乱码，无法正常打印。于是接下来也需要研究Golang的字符串和protobuf，否则这个[]byte总是写成一长串数字感觉不太好。
+2. 希望把返回的Value以字符串的形式打印出来在控制台上，但是发现无论怎么转换都是有乱码，无法正常打印。于是接下来也需要研究Golang的字符串和protobuf看看能否正常打印，否则这个[]byte总是写成一长串数字感觉不太好。
 
 
 
@@ -21,7 +21,7 @@ func (z *zkEtcd) GetData(xid Xid, op *GetDataRequest) ZKResponse {
 	p := mkPath(op.Path)
 	if op.Path == "/hbase/meta-region-server"{
 		fmt.Printf("The path is : %s", op.Path)
-		datResp := &GetDataResponse{Data:[]byte{255,0,0,0,20,109,97,115,116,101,114,58,49,54,48,48,48,238,184,44 ,12 ,55 ,147 ,137 ,251 ,80 ,66 ,85 ,70 ,10 ,24 ,10 ,12 ,49 ,48 ,46 ,57 ,49 ,46 ,52 ,52 ,46 ,49 ,50 ,50 ,16 ,148 ,125 ,24,211,141,170,170,182,46,16,0,24,3}} // region server的地址
+		datResp := &GetDataResponse{Data:[]byte{255,0,0,0,20,109,97,115,116,101,114,58,49,54,48,48,48,238,184,44 ,12 ,55 ,147 ,137 ,251 ,80 ,66 ,85 ,70 ,10 ,24 ,10 ,12 ,49 ,48 ,46 ,57 ,49 ,46 ,52 ,52 ,46 ,49 ,50 ,50 ,16 ,148 ,125 ,24,211,141,170,170,182,46,16,0,24,3}} // region server的地址 
 		return mkZKResp(xid, 0, datResp)
 	}
 ```
@@ -31,7 +31,7 @@ func (z *zkEtcd) GetData(xid Xid, op *GetDataRequest) ZKResponse {
 
 HBase正常请求成功：
 
-![image-20200720101056337](/Users/bytedance/Library/Application Support/typora-user-images/image-20200720101056337.png)
+![image-20200720101056337](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200720101056337.png)
 
 返回hello world
 
@@ -39,9 +39,12 @@ HBase正常请求成功：
 
 Zetcd打印正常，按预想的逻辑进行：
 
-![image-20200720101150109](/Users/bytedance/Library/Application Support/typora-user-images/image-20200720101150109.png)
+![image-20200720101150109](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200720101150109.png)
 
 ## 下一步计划
-1. 学习Protobuf，看能否更好地返回信息。
 
+以下的计划都是可以选的，可以和老师讨论一下先做哪些？
+
+1. 学习Protobuf，看能否更好地返回信息。
 2. 目前这个值是直接在zetcd写死，看能否用PD来kv存储这个值呢？
+3. 看一下HBase Client 存储meta-region-server调用，用PD来存储，然后GetData再去PD里读，最终把meta-region-server相关的依赖全部摘除。
