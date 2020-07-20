@@ -31,7 +31,7 @@ func (z *zkEtcd) GetData(xid Xid, op *GetDataRequest) ZKResponse {
 
 HBase正常请求成功：
 
-![image-20200720101056337](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200720101056337.png)
+![image-20200720101056337](./img/image-20200720101056337.png)
 
 返回hello world
 
@@ -39,7 +39,7 @@ HBase正常请求成功：
 
 Zetcd打印正常，按预想的逻辑进行：
 
-![image-20200720101150109](/Users/bytedance/code/Zetta-Hbase-Adapter/img/image-20200720101150109.png)
+![image-20200720101150109](./img/image-20200720101150109.png)
 
 ## 下一步计划
 
