@@ -47,4 +47,4 @@ Zetcd打印正常，按预想的逻辑进行：
 
 1. 学习Protobuf，看能否更好地返回信息。
 2. 目前这个值是直接在zetcd写死，看能否用PD来kv存储这个值呢？
-3. 看一下HBase Client 存储meta-region-server调用，用PD来存储，然后GetData再去PD里读，最终把meta-region-server相关的依赖全部摘除。
+3. ~~看一下HBase 启动的时候是如何配置/hbase/meta-region-server，用PD来存储，然后GetData再去PD里读，最终把meta-region-server相关的依赖全部摘除.~~ 由于数据库不再是HBase，所以配置方式可能有变化，这里可以等到数据库在zetcd元数据的配置方案确定后再讨论。
