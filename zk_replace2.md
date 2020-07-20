@@ -45,6 +45,8 @@ Zetcd打印正常，按预想的逻辑进行：
 
 以下的计划都是可以选的，可以和老师讨论一下先做哪些？
 
-1. 学习Protobuf，看能否更好地返回信息。
-2. 目前这个值是直接在zetcd写死，看能否用PD来kv存储这个值呢？
+1. ~~学习Protobuf，看能否更好地返回信息。~~ 这个[]byte无法解析和Protobuf应该没有关系
+2. ~~目前这个值是直接在zetcd写死，看能否用PD来kv存储这个值呢？~~ 是可以存，但是不知道在哪个步骤加入存入PD的操作，因为我在本地Debug的时候没有观察到HBase Server配置/hbase/meta-region-server
 3. ~~看一下HBase 启动的时候是如何配置/hbase/meta-region-server，用PD来存储，然后GetData再去PD里读，最终把meta-region-server相关的依赖全部摘除.~~ 由于数据库不再是HBase，所以配置方式可能有变化，这里可以等到数据库在zetcd元数据的配置方案确定后再讨论。
+
+所以目前稍稍有点迷茫，不知道下一步做啥
