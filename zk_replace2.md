@@ -9,7 +9,7 @@
 
 ## 踩的坑
 
-1. 一开始以为GetData只有在HBase Client才会调用，但是发现Hbase Server也严重依赖这个函数，所以我直接修改GetData函数，也影响了Hbase Server，出现了很多奇怪的Bug。所以现在加入了条件判断，避免误伤其他请求。
+1. 一开始以为GetData只有在HBase Client才会调用，但是发现Hbase Server也严重依赖这个函数，所以我直接修改GetData函数，也影响了Hbase Server，出现了很多奇怪的Bug。现在加入了条件判断，避免误伤其他请求。
 
 2. 希望把返回的Value以字符串的形式打印出来，但是发现经过了protobuf的处理，无论怎么转换都是有乱码，无法正常打印。于是接下来也需要研究Golang的字符串和protobuf，否则这个[]byte总是写成一长串数字感觉不太好。
 
@@ -27,6 +27,9 @@ func (z *zkEtcd) GetData(xid Xid, op *GetDataRequest) ZKResponse {
 ```
 
 目前来说zketcd的代码改写成了这种形式，直接构造ZKResp并且没有走etcd的查询。
+目前对于HBase简单的创建，获取请求，已经能正常响应，并且在op.Path="hbase/meta-region-server"的情况下，没有用到etcd。
 
 ## 下一步计划
-目前这个值是直接在zetcd写死，看能否用PD来kv存储这个值呢？
+1. 学习Protobuf，看能否更好地返回信息。
+
+2. 目前这个值是直接在zetcd写死，看能否用PD来kv存储这个值呢？

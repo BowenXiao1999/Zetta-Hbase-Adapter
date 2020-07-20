@@ -34,6 +34,7 @@ Record for Zetta Hbase adaption Project.
  
 - [ ] Relace back cluster etcd by pd
 
+- [x] Eliminate the dependency of etcd for GetData(/hbase/meta-region-server) [document](./zk_replace2.md)
 
 
 
