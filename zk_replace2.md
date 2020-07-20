@@ -29,6 +29,18 @@ func (z *zkEtcd) GetData(xid Xid, op *GetDataRequest) ZKResponse {
 目前来说zketcd的代码改写成了这种形式，直接构造ZKResp并且没有走etcd的查询。
 目前对于HBase简单的创建，获取请求，已经能正常响应，并且在op.Path="hbase/meta-region-server"的情况下，没有用到etcd。
 
+HBase正常请求成功：
+
+![image-20200720101056337](/Users/bytedance/Library/Application Support/typora-user-images/image-20200720101056337.png)
+
+返回hello world
+
+
+
+Zetcd打印正常，按预想的逻辑进行：
+
+![image-20200720101150109](/Users/bytedance/Library/Application Support/typora-user-images/image-20200720101150109.png)
+
 ## 下一步计划
 1. 学习Protobuf，看能否更好地返回信息。
 
