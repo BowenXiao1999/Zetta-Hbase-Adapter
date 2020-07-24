@@ -30,13 +30,14 @@ Record for Zetta Hbase adaption Project.
 
 - [x] Test rebuild zetcd with CRUD Request [document](./zk_create.md)
 
-- [ ] Analyze the source code of zetcd in depth and evaluate the performance [document](./zetcd_performance.md)
+- [x] Analyze the source code of zetcd in depth and evaluate the performance [document](./zetcd_performance.md)
  
-- [ ] Relace back cluster etcd by pd
+
 
 - [x] Eliminate the dependency of etcd for GetData(/hbase/meta-region-server) [document](./zk_replace2.md)
 
-
+### Week3 
+- [x] Relace back cluster etcd by pd [document](./pd_replace.md)
 
 ## Useful Links
 ### HBase Client RPC 相关资料
