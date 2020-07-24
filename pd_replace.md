@@ -1,6 +1,8 @@
 # 替换Backend 为PD集群
 
-在[AskTUG](https://asktug.com/t/topic/36076)上得到关于etcd client 和PD比较肯定的消息后，了解到了PD集群其实支持etcd的所有API，这也大大减少了接入难度。以下为测试细节
+在[AskTUG](https://asktug.com/t/topic/36076)上得到关于etcd client 和PD比较肯定的消息后，了解到了PD集群其实支持etcd的所有API，这也大大减少了接入难度。以下为测试细节。
+
+幸运地发现，不需要改动代码，只要在2379启动PD，并且zetcd把请求forward给PD即可。但感觉这样本质上还是在用etcd，不过减少了运维组件。
 
 ## 启动PD
 Client URL 在2379
