@@ -39,6 +39,8 @@ Record for Zetta Hbase adaption Project.
 ### Week3 
 - [x] Relace back cluster etcd by pd [document](./pd_replace.md)
 
+- [x] Finish the basic implementation of ZKLib and Test it 
+
 ## Useful Links
 ### HBase Client RPC 相关资料
 
