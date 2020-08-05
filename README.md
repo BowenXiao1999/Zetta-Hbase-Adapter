@@ -41,6 +41,11 @@ Record for Zetta Hbase adaption Project.
 
 - [x] Finish the basic implementation of ZKLib and Test it 
 
+### Week4
+- [x] Support basic API of (SetData/Get/Create/Delete)
+
+- [x] Implement basic ExistW to setWatches
+
 ## Useful Links
 ### HBase Client RPC 相关资料
 
