@@ -47,12 +47,12 @@ Record for Zetta Hbase adaption Project.
 - [x] Implement basic ExistW to setWatches
 
 
-### Week5-6
+### Week5-6-7
 - [x] Enhance the robust of API (SetData/Get/Create/Delete/SetWatches)
 
 - [x] Enrich the Unit Test and refactor it
 
-### Week7
+### Week8
 - [ ] Summary my work into a [document]()
 
 
