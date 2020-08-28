@@ -46,6 +46,18 @@ Record for Zetta Hbase adaption Project.
 
 - [x] Implement basic ExistW to setWatches
 
+
+### Week5-6
+- [x] Enhance the robust of API (SetData/Get/Create/Delete/SetWatches)
+
+- [x] Enrich the Unit Test and refactor it
+
+### Week7
+- [ ] Summary my work into a [document]()
+
+
+
+
 ## Useful Links
 ### HBase Client RPC 相关资料
 
