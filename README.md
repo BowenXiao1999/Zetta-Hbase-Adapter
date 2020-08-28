@@ -53,7 +53,7 @@ Record for Zetta Hbase adaption Project.
 - [x] Enrich the Unit Test and refactor it
 
 ### Week8
-- [ ] Summary my work into a [document]()
+- [ ] Summary my work into a [document](./zk_work.md)
 
 
 
