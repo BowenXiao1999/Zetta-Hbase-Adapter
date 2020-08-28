@@ -1,5 +1,11 @@
 # 总结一下目前所做的工作以及之后的安排
 
+代码地址：https://github.com/BowenXiao1999/ZKLib
+主要文件：
+https://github.com/BowenXiao1999/ZKLib/blob/master/zketcd_lib.go
+https://github.com/BowenXiao1999/ZKLib/blob/master/zketcd_lib_test.go
+
+
 先归纳一下当前的API，用法＋返回值和go zk client保持一致，[参见](https://godoc.org/github.com/samuel/go-zookeeper/zk):　
 1. Set
 2. GetData
