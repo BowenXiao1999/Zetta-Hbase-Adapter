@@ -53,7 +53,11 @@ Record for Zetta Hbase adaption Project.
 - [x] Enrich the Unit Test and refactor it
 
 ### Week8
-- [ ] Summary my work into a [document](./zk_work.md)
+- [x] Summary my work into a [document](./zk_work.md)
+
+### Week9-11
+- [x] Code Repo For ZKLib: https://github.com/BowenXiao1999/ZKLib
+  
 
 
 
